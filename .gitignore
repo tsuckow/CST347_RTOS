@@ -10,5 +10,12 @@
 *.tra
 *.bak
 *.sct
+*.lst
+*.lnp
+*.dep
+*.crf
+*.d
+*._ia
+*.axf
 #KDE
 .directory

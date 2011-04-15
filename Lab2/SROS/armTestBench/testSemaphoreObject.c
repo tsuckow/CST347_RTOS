@@ -43,7 +43,7 @@ int main(void)
   set_cursor (0, 1);
   
 
-	printf("==MAIN==\n");
+	printf("\n\n\n\n==MAIN==\n");
 	lcd_print ("==MAIN==");
 
     rtosInit();

@@ -22,7 +22,9 @@ FILE __stdout;
 
 
 int fputc(int ch, FILE *f) {
-  return (sendchar(ch));
+int tmp = sendchar(ch);
+if( ch == '\n' ) sendchar('\r');
+  return (tmp);
 }
 
 
@@ -34,6 +36,7 @@ int ferror(FILE *f) {
 
 void _ttywrch(int ch) {
   sendchar(ch);
+  if( ch == '\n' ) sendchar('\r');
 }
 
 
