@@ -1,0 +1,6 @@
+**Porting SROS to our board**
+Options->Linker Enable "Use Memory Layout from Target Dialog"
+LPC2300.s (Startup Assembly Code) is stolen from Blinky Demo (May or may not
+matter)
+Assembly is not (probably not PRESERVE8 compatible but files have been labeled as
+such to facilitate compiling)
