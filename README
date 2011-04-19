@@ -2,5 +2,7 @@
 Options->Linker Enable "Use Memory Layout from Target Dialog"
 LPC2300.s (Startup Assembly Code) is stolen from Blinky Demo (May or may not
 matter)
-Assembly is not (probably not PRESERVE8 compatible but files have been labeled as
-such to facilitate compiling)
+Assembly is not (is not actually PRESERVE8 compatible but files have been labeled as
+such to facilitate compiling, if 64 bit types are used then the assembly will
+need to be updated to use 8 byte stack alignment) --diag_warning 1546
+r4-r11 & sp are callee saved

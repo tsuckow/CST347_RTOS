@@ -345,7 +345,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>SROS/source</IncludePath>
+              <IncludePath>SROS/source, .</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -357,14 +357,14 @@
             <SwStkChk>0</SwStkChk>
             <NoWarn>0</NoWarn>
             <VariousControls>
-              <MiscControls>--diag_warning 1546</MiscControls>
+              <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
               <IncludePath></IncludePath>
             </VariousControls>
           </Aads>
           <LDads>
-            <umfTarg>0</umfTarg>
+            <umfTarg>1</umfTarg>
             <Ropi>0</Ropi>
             <Rwpi>0</Rwpi>
             <noStLib>0</noStLib>
@@ -449,6 +449,46 @@
               <FileName>sampleInterruptServiceRoutine.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\SROS\armTestBench\sampleInterruptServiceRoutine.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Serial</GroupName>
+          <Files>
+            <File>
+              <FileName>Retarget.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\serial\Retarget.c</FilePath>
+            </File>
+            <File>
+              <FileName>Serial.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\serial\Serial.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>LCD</GroupName>
+          <Files>
+            <File>
+              <FileName>LCD_4bit.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\lcd\LCD_4bit.c</FilePath>
+            </File>
+            <File>
+              <FileName>LCD.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\lcd\LCD.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>LED</GroupName>
+          <Files>
+            <File>
+              <FileName>led.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\LED\led.c</FilePath>
             </File>
           </Files>
         </Group>

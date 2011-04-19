@@ -1,5 +1,6 @@
 #include "rtos.h"
 #include "assert.h"
+#include <stdio.h>
 
 #define MAX_THREADS_IN_THE_SYSTEM   100
 #define MAX_LIST_NODES              2*MAX_THREADS_IN_THE_SYSTEM
@@ -97,9 +98,13 @@ the auxInfo field of the listNode.
 void listObjectInsert(listObject_t *listNodePtr, 
                     threadObject_t *newThreadObject)
 {
-    listNode_t *newListNodePtr;
-    uint32 newThreadObjectPriority;
-    
+   listNode_t *newListNodePtr;
+   uint32 newThreadObjectPriority;
+
+   printf("==List Object Insert==\n");
+   printf("  list> 0x%p\n", listNodePtr);
+   printf("  auxinfo> %d\n", listNodePtr->auxInfo);
+   printf("  priority> %d\n", newThreadObject->priority);
     assert(newThreadObject != 0);
     assert(newThreadObject->waitListResource == 0);
     assert(listNodePtr != 0);
@@ -138,8 +143,13 @@ and return the threadObject (i.e. "element") in the listNode.
 threadObject_t *listObjectDelete(listObject_t *listObjectPtr)
 {
     threadObject_t *element;
-    
+
     listNode_t *freedListNodePtr;
+
+   printf("==List Object Delete==\n");
+   printf("  list> 0x%p\n", listObjectPtr);
+   printf("  auxinfo> %d\n", listObjectPtr->auxInfo);
+
 
     assert(listObjectPtr != 0);
     assert(listObjectPtr->nextListNode != 0);
@@ -166,6 +176,10 @@ threadObject_t *listObjectDelete(listObject_t *listObjectPtr)
 
     //return the threadObject (i.e. element) available
     //in the first listNode (which is deleted).
+
+   printf("  priority> %d\n", element->priority);
+   printf("  Thread PC> 0x%p\n", (void *)element->R[15]);
+   printf("<<List Object Delete<<\n");
 
     return element;
 }
