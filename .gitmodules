@@ -1,0 +1,3 @@
+[submodule "SROS"]
+	path = SROS
+	url = git@github.com:Deathbobomega/SROS.git
