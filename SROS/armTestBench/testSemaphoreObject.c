@@ -7,18 +7,19 @@
 #include <led/led.h>
 #include <serial/serial.h>
 #include <lcd/lcd.h>
+#include "timer.h"
 
 semaphoreObject_t   testSemaphore;
 
-threadObject_t thread1, thread2, thread3;
-void function1(void);
-void function2(void);
-void function3(void);
-int32 stack1[1000], stack2[1000], stack3[1000];
+threadObject_t thread1, thread2;
+void function1(int8 * const counter);
+void function2(int8 * const counter);
+int32 stack1[1000], stack2[1000];
 
 int main(void)
 {
-   register void* sp __asm ("r11");
+   int8 mycounter = 0;
+   
 	LED_Init();
 	LED_Out(0x55);
 
@@ -37,9 +38,10 @@ int main(void)
 	printf("<Init\n");
 
     printf(">Creating Threads\n");
+	
     threadObjectCreate(&thread1,
                         (void *)function1,
-                        0,
+                        (int32)&mycounter,
                         0,
                         0,
                         0,
@@ -50,7 +52,7 @@ int main(void)
                         
     threadObjectCreate(&thread2,
                         (void *)function2,
-                        0,
+                        (int32)&mycounter,
                         0,
                         0,
                         0,
@@ -58,106 +60,36 @@ int main(void)
                         2,
                         INITIAL_CPSR_ARM_FUNCTION,
                         "thread2");
-                        
-    threadObjectCreate(&thread3,
-                        (void *)function3,
-                        0,
-                        0,
-                        0,
-                        0,
-                        &stack3[1000],
-                        3,
-                        INITIAL_CPSR_ARM_FUNCTION,
-                        "thread3");
     printf("<Creating Threads\n");
-	         
-	printf(">Init Semaphore\n");
-    semaphoreObjectInit(&testSemaphore, 0);
-    printf("<Init Semaphore\n");
-
+	        
    srand(1);
+   
+   timer_init();
 
    printf("==Scheduler==\n");
    scheduler();            //This function will never return.
 }                       
                         
                         
-void function1(void)
+void function1(int8 * const counter)
 {
-    int choice;
-    int waitTime;
-    
     while(1)
     {
-        choice = rand() % 2 + 1;
-        
-        waitTime = rand() % 3 - 1;
-
-        switch(choice)
-        {
-        case 1:
-            printf("trying to pend with testSamaphore in thread1 with waitTime %d\n", waitTime);
-            if(semaphoreObjectPend(&testSemaphore, waitTime))
-            {
-                printf("testSamaphore pend successful in thread1 with waitTime %d\n", waitTime);
-            }
-            else
-            {
-                printf("testSamaphore pend failed in thread1 with waitTime %d\n", waitTime);
-            }
-            break;
-            
-        case 2:
-            printf("trying to post testSemaphore in thread1\n");
-            semaphoreObjectPost(&testSemaphore);
-            printf("testSemaphore got posted in thread1\n");
-            break;
-        }
+		++(*counter);
+		LED_Out(*counter);
+		sleep(1000);
     }
 }
                     
-void function2(void)
+void function2(int8 * const counter)
 {
-    int choice;
-    int waitTime;
-    
-    while(1)
-    {
-        choice = rand() % 2 + 1;
-        
-        waitTime = rand() % 3 - 1;
-
-        switch(choice)
-        {
-        case 1:
-            printf("trying to pend with testSamaphore in thread2 with waitTime %d\n", waitTime);
-            if(semaphoreObjectPend(&testSemaphore, waitTime))
-            {
-                printf("testSamaphore pend successful in thread2 with waitTime %d\n", waitTime);
-            }
-            else
-            {
-                printf("testSamaphore pend failed in thread2 with waitTime %d\n", waitTime);
-            }
-            break;
-            
-        case 2:
-            printf("trying to post testSemaphore in thread2\n");
-            semaphoreObjectPost(&testSemaphore);
-            printf("testSemaphore got posted in thread2\n");
-            break;
-        }
-    }
-}
-                    
-                                
-void function3(void)
-{
-    while(1)
-    {
-        printf("trying to post testSemaphore in thread3\n");
-        semaphoreObjectPost(&testSemaphore);
-        printf("testSemaphore got posted in thread3\n");
-    }
+	while(1)
+	{
+    	printf( "Count: %d\n", *counter );
+	}
 }
 
+void DoDebug(void)
+{
+	printf("!!!DoDebug\n");
+}

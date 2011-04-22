@@ -334,6 +334,8 @@ void insertIntoTimerList(threadObject_t *newThreadObject,
 {
     int32 waitTime;
     listNode_t *listNodePtr, *newListNodePtr;
+ 
+ 	printf(">>Insert into timer list\n");
     
     assert(newThreadObject != 0);
     assert(newThreadObject->waitListTimer == 0);
@@ -379,6 +381,8 @@ void insertIntoTimerList(threadObject_t *newThreadObject,
     //listObject first element is dummy node. It's auxInfo field holds 
     //the number of nodes in the list.
     timerList.auxInfo++;
+	
+	printf("<<Insert into timer list\n");
 }
 
 /*

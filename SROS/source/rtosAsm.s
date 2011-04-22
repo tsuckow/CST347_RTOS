@@ -180,7 +180,7 @@ block
 ;   Jump to Scheduler();
 ;}
 
-            
+            IMPORT DoDebug
             AREA    sleep_code, CODE
             
 sleep
@@ -216,12 +216,12 @@ sleep
             SET_STATE_OF_PC_IN_CPSR R14, R4 ;This macro keep the state of 
                                             ;PC in R4
             
-            STR     R4, [R1, #threadObject_t_cpsr_offset] 
+            STR     R4, [R0, #threadObject_t_cpsr_offset]
                                             ;save the current status of the 
                                             ;thread.
             
             ;insert the running thread into timerList.
-            
+
             MOV     R1, #0                  ;wait list is null. 
                                             ;Running thread will only wait in 
                                             ;timer list.
