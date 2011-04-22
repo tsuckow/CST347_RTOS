@@ -585,7 +585,7 @@ threadObjectName_offset EQU 20
             
             LDR     R0, =readyList      ;R0=readyList
             
-            STMFD   SP!, {LR}
+            STMFD   SP!, {R12,LR}
             
             ;listObjectInsert(&readyList, threadObject);
             BL      listObjectInsert
@@ -633,7 +633,7 @@ threadObjectName_offset EQU 20
                                         ;and start the highest priority 
                                         ;thread available in the readyList.
             
-            LDMFD   SP!, {PC}           ;return         
+            LDMFD   SP!, {R12,PC}           ;return         
             
 schuduler_is_not_started
 called_from_interrupt_service_routine   
@@ -643,7 +643,7 @@ context_switch_not_needed
                                         ;get original interrupts status.
             
             
-            LDMFD   SP!, {PC}           ;return
+            LDMFD   SP!, {R12,PC}           ;return
             
             
         
