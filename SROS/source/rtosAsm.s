@@ -180,7 +180,7 @@ block
 ;   Jump to Scheduler();
 ;}
 
-            IMPORT DoDebug
+            
             AREA    sleep_code, CODE
             
 sleep
@@ -216,12 +216,12 @@ sleep
             SET_STATE_OF_PC_IN_CPSR R14, R4 ;This macro keep the state of 
                                             ;PC in R4
             
-            STR     R4, [R0, #threadObject_t_cpsr_offset]
+            STR     R4, [R0, #threadObject_t_cpsr_offset] 
                                             ;save the current status of the 
                                             ;thread.
             
             ;insert the running thread into timerList.
-
+            
             MOV     R1, #0                  ;wait list is null. 
                                             ;Running thread will only wait in 
                                             ;timer list.
@@ -585,7 +585,7 @@ threadObjectName_offset EQU 20
             
             LDR     R0, =readyList      ;R0=readyList
             
-            STMFD   SP!, {LR}
+            STMFD   SP!, {R12,LR}
             
             ;listObjectInsert(&readyList, threadObject);
             BL      listObjectInsert
@@ -633,7 +633,7 @@ threadObjectName_offset EQU 20
                                         ;and start the highest priority 
                                         ;thread available in the readyList.
             
-            LDMFD   SP!, {PC}           ;return         
+            LDMFD   SP!, {R12,PC}           ;return         
             
 schuduler_is_not_started
 called_from_interrupt_service_routine   
@@ -643,7 +643,7 @@ context_switch_not_needed
                                         ;get original interrupts status.
             
             
-            LDMFD   SP!, {PC}           ;return
+            LDMFD   SP!, {R12,PC}           ;return
             
             
         
