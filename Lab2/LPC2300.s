@@ -483,19 +483,6 @@ MEMMAP          EQU     0xE01FC040      ; Memory Mapping Control
                 MOV     SP, R0
                 SUB     R0, R0, #SVC_Stack_Size
 
-;  Enter User Mode and set its Stack Pointer
-                MSR     CPSR_c, #Mode_USR
-                IF      :DEF:__MICROLIB
-
-                EXPORT __initial_sp
-
-                ELSE
-
-                MOV     SP, R0
-                SUB     SL, SP, #USR_Stack_Size
-
-                ENDIF
-
 
 ; Enter the C code
 

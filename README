@@ -6,3 +6,4 @@ Assembly is not (is not actually PRESERVE8 compatible but files have been labele
 such to facilitate compiling, if 64 bit types are used then the assembly will
 need to be updated to use 8 byte stack alignment) --diag_warning 1546
 r4-r11 & sp are callee saved
+In rtosasm.s, in sleep function STR "R4, [R1, #threadObject_t_cpsr_offset]" should be "STR     R4, [R0, #threadObject_t_cpsr_offset]"
