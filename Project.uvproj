@@ -42,8 +42,8 @@
             <NotGenerated>0</NotGenerated>
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
-          <OutputDirectory>.\</OutputDirectory>
-          <OutputName>Lab2</OutputName>
+          <OutputDirectory>.\output\</OutputDirectory>
+          <OutputName>Project</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
@@ -135,7 +135,7 @@
             <RestoreToolbox>1</RestoreToolbox>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
-          <TargetSelection>-1</TargetSelection>
+          <TargetSelection>0</TargetSelection>
           <SimDlls>
             <CpuDll></CpuDll>
             <CpuDllArguments></CpuDllArguments>
@@ -149,7 +149,7 @@
             <PeripheralDll></PeripheralDll>
             <PeripheralDllArguments></PeripheralDllArguments>
             <InitializationFile></InitializationFile>
-            <Driver></Driver>
+            <Driver>BIN\UL2ARM.DLL</Driver>
           </TargetDlls>
         </DebugOption>
         <Utilities>
@@ -158,11 +158,11 @@
             <UseExternalTool>1</UseExternalTool>
             <RunIndependent>0</RunIndependent>
             <UpdateFlashBeforeDebugging>0</UpdateFlashBeforeDebugging>
-            <Capability>0</Capability>
-            <DriverSelection>-1</DriverSelection>
+            <Capability>1</Capability>
+            <DriverSelection>4096</DriverSelection>
           </Flash1>
-          <Flash2></Flash2>
-          <Flash3>LPC210x_ISP.EXE ("#H" ^X $D COM1: 38400 1)</Flash3>
+          <Flash2>BIN\UL2ARM.DLL</Flash2>
+          <Flash3>"LPC210x_ISP.EXE" ("#H" ^X $D COM1: 38400 1)</Flash3>
           <Flash4></Flash4>
         </Utilities>
         <TargetArmAds>
@@ -441,14 +441,14 @@
           <GroupName>?</GroupName>
           <Files>
             <File>
-              <FileName>testSemaphoreObject.c</FileName>
+              <FileName>isr.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\SROS\armTestBench\testSemaphoreObject.c</FilePath>
+              <FilePath>.\isr.c</FilePath>
             </File>
             <File>
-              <FileName>sampleInterruptServiceRoutine.c</FileName>
+              <FileName>main.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\SROS\armTestBench\sampleInterruptServiceRoutine.c</FilePath>
+              <FilePath>.\main.c</FilePath>
             </File>
           </Files>
         </Group>
