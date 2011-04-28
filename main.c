@@ -12,13 +12,13 @@
 semaphoreObject_t   testSemaphore;
 
 threadObject_t thread1, thread2;
-void function1(volatile int8 * const counter);
-void function2(volatile int8 * const counter);
+void function1(volatile uint8 * const counter);
+void function2(volatile uint8 * const counter);
 int32 stack1[1000], stack2[1000];
 
 int main(void)
 {
-   int8 mycounter = 0;
+   uint8 mycounter = 0;
    
 	LED_Init();
 	LED_Out(0x55);
@@ -46,7 +46,7 @@ int main(void)
                         0,
                         0,
                         &stack1[1000],
-                        1,
+                        2,
                         INITIAL_CPSR_ARM_FUNCTION,
                         "thread1");
                         
@@ -71,17 +71,16 @@ int main(void)
 }                       
                         
                         
-void function1(volatile int8 * const counter)
+void function1(volatile uint8 * const counter)
 {
     while(1)
     {
 		++(*counter);
 		LED_Out(*counter);
-		sleep(1000);
     }
 }
                     
-void function2(volatile int8 * const counter)
+void function2(volatile uint8 * const counter)
 {
 	while(1)
 	{
