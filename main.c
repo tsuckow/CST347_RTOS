@@ -8,18 +8,25 @@
 #include <serial/serial.h>
 #include <lcd/lcd.h>
 #include "timer.h"
+#include "rwLock.h"
 
 semaphoreObject_t   testSemaphore;
 
-threadObject_t thread1, thread2;
-void function1(volatile uint8 * const counter);
-void function2(volatile uint8 * const counter);
-int32 stack1[1000], stack2[1000];
+void functionReadingThread(volatile uint32 * const counter, uint32 threadnum, rwLockObject_t * const lock);
+void functionWritingThread(volatile uint32 * const counter, uint32 threadnum, rwLockObject_t * const lock);
+
+#define READER_THREADS 1
+#define WRITER_THREADS 1
+
+int32 stack_readers[READER_THREADS][1000], stack_writers[WRITER_THREADS][1000];
+threadObject_t threadReader[READER_THREADS], threadWriter[WRITER_THREADS];
+uint32 critVal;
+rwLockObject_t rwLock;
 
 int main(void)
 {
-   uint8 mycounter = 0;
-   
+   unsigned int i;
+
 	LED_Init();
 	LED_Out(0x55);
 
@@ -38,57 +45,69 @@ int main(void)
 	printf("<Init\n");
 
     printf(">Creating Threads\n");
-	
-    threadObjectCreate(&thread1,
-                        (void *)function1,
-                        (int32)&mycounter,
+
+   rwLockObjectInit( &rwLock );
+   for(i = 0; i < READER_THREADS; ++i)
+   {
+
+      threadObjectCreate(&threadReader[i],
+                        (void *)functionReadingThread,
+                        (int32)&critVal,
+                        i,
+                        (int32)&rwLock,
                         0,
-                        0,
-                        0,
-                        &stack1[1000],
-                        2,
+                        &stack_readers[i][1000],
+                        1,
                         INITIAL_CPSR_ARM_FUNCTION,
-                        "thread1");
-                        
-    threadObjectCreate(&thread2,
-                        (void *)function2,
-                        (int32)&mycounter,
+                        "Rthread");
+   }
+   for(i = 0; i < WRITER_THREADS; ++i)
+   {
+
+      threadObjectCreate(&threadWriter[i],
+                        (void *)functionWritingThread,
+                        (int32)&critVal,
+                        i,
+                        (int32)&rwLock,
                         0,
-                        0,
-                        0,
-                        &stack2[1000],
-                        2,
+                        &stack_writers[i][1000],
+                        1,
                         INITIAL_CPSR_ARM_FUNCTION,
-                        "thread2");
+                        "Wthread");
+   }
+
     printf("<Creating Threads\n");
-	        
+
    srand(1);
-   
+
    timer_init();
 
    printf("==Scheduler==\n");
    scheduler();            //This function will never return.
-}                       
-                        
-                        
-void function1(volatile uint8 * const counter)
-{
-    while(1)
-    {
-		++(*counter);
-		LED_Out(*counter);
-    }
-}
-                    
-void function2(volatile uint8 * const counter)
-{
-	while(1)
-	{
-    	printf( "Count: %d\n", *counter );
-	}
 }
 
-void DoDebug(void)
+
+void functionWritingThread(volatile uint32 * const counter, uint32 threadnum, rwLockObject_t * const lock)
 {
-	printf("!!!DoDebug\n");
+   printf( "WriterThread%d: START\n", threadnum );
+   while(1)
+   {
+      rwLockObjectLockWriter( lock );
+      ++(*counter);
+      printf( "WriterThread%d: %d\n", threadnum, *counter );
+      rwLockObjectRelease( lock );
+      yield();
+   }
 }
+
+void functionReadingThread(volatile uint32 * const counter, uint32 threadnum, rwLockObject_t * const lock)
+{
+   printf( "ReaderThread%d: START\n", threadnum );
+   while(1)
+   {
+      rwLockObjectLockReader( lock );
+      printf( "ReaderThread%d: %d\n", threadnum, *counter );
+      rwLockObjectRelease( lock );
+   }
+}
+

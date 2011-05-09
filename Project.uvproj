@@ -450,6 +450,16 @@
               <FileType>1</FileType>
               <FilePath>.\main.c</FilePath>
             </File>
+            <File>
+              <FileName>rwLock.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\rwLock.c</FilePath>
+            </File>
+            <File>
+              <FileName>rwLock.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\rwLock.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

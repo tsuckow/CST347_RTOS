@@ -17,5 +17,6 @@
 *.d
 *._ia
 *.axf
+*.uvopt
 #KDE
 .directory
