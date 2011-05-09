@@ -96,7 +96,6 @@ void functionWritingThread(volatile uint32 * const counter, uint32 threadnum, rw
       ++(*counter);
       printf( "WriterThread%d: %d\n", threadnum, *counter );
       rwLockObjectRelease( lock );
-      yield();
    }
 }
 
