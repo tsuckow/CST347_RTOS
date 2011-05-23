@@ -435,6 +435,11 @@
               <FileType>5</FileType>
               <FilePath>.\SROS\source\typeDef.h</FilePath>
             </File>
+            <File>
+              <FileName>mutexObject.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\SROS\source\mutexObject.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
