@@ -12,21 +12,16 @@
 
 semaphoreObject_t   testSemaphore;
 
-void functionReadingThread(volatile uint32 * const counter, uint32 threadnum, rwLockObject_t * const lock);
-void functionWritingThread(volatile uint32 * const counter, uint32 threadnum, rwLockObject_t * const lock);
+void functionLowThread( mutexObject_t * const lock);
+void functionMedThread(void);
+void functionHighThread( mutexObject_t * const lock);
 
-#define READER_THREADS 1
-#define WRITER_THREADS 1
-
-int32 stack_readers[READER_THREADS][1000], stack_writers[WRITER_THREADS][1000];
-threadObject_t threadReader[READER_THREADS], threadWriter[WRITER_THREADS];
-uint32 critVal;
-rwLockObject_t rwLock;
+int32 stack[3][1000];
+threadObject_t threads[3];
+mutexObject_t mutex;
 
 int main(void)
 {
-   unsigned int i;
-
 	LED_Init();
 	LED_Out(0x55);
 
@@ -38,45 +33,48 @@ int main(void)
   set_cursor (0, 1);
   lcd_print (">>>>>>>><<<<<<<<");
 
-	printf("\n\n\n\n==MAIN==\n");
-	
-	printf(">Init\n");
-    rtosInit();
-	printf("<Init\n");
+   printf("\n\n\n\n==MAIN==\n");
 
-    printf(">Creating Threads\n");
+   printf(">Init\n");
+   rtosInit();
+   printf("<Init\n");
 
-   rwLockObjectInit( &rwLock );
-   for(i = 0; i < READER_THREADS; ++i)
-   {
+   printf(">Creating Threads\n");
 
-      threadObjectCreate(&threadReader[i],
-                        (void *)functionReadingThread,
-                        (int32)&critVal,
-                        i,
-                        (int32)&rwLock,
-                        0,
-                        &stack_readers[i][1000],
-                        1,
-                        INITIAL_CPSR_ARM_FUNCTION,
-                        "Rthread");
-   }
-   for(i = 0; i < WRITER_THREADS; ++i)
-   {
+   mutexObjectInit( &mutex, 1);
 
-      threadObjectCreate(&threadWriter[i],
-                        (void *)functionWritingThread,
-                        (int32)&critVal,
-                        i,
-                        (int32)&rwLock,
-                        0,
-                        &stack_writers[i][1000],
-                        1,
-                        INITIAL_CPSR_ARM_FUNCTION,
-                        "Wthread");
-   }
+   threadObjectCreate(&threads[0],
+                     (void *)functionLowThread,
+                     (int32)&mutex,
+                     0,
+                     0,
+                     0,
+                     &stack[0][1000],
+                     30,
+                     INITIAL_CPSR_ARM_FUNCTION,
+                     "Lthread");
+   threadObjectCreate(&threads[1],
+                     (void *)functionMedThread,
+                     0,
+                     0,
+                     0,
+                     0,
+                     &stack[1][1000],
+                     20,
+                     INITIAL_CPSR_ARM_FUNCTION,
+                     "Mthread");
+   threadObjectCreate(&threads[2],
+                     (void *)functionHighThread,
+                     (int32)&mutex,
+                     0,
+                     0,
+                     0,
+                     &stack[2][1000],
+                     10,
+                     INITIAL_CPSR_ARM_FUNCTION,
+                     "Hthread");
 
-    printf("<Creating Threads\n");
+   printf("<Creating Threads\n");
 
    srand(1);
 
@@ -86,27 +84,29 @@ int main(void)
    scheduler();            //This function will never return.
 }
 
-
-void functionWritingThread(volatile uint32 * const counter, uint32 threadnum, rwLockObject_t * const lock)
+void functionLowThread( mutexObject_t * const lock)
 {
-   printf( "WriterThread%d: START\n", threadnum );
-   while(1)
-   {
-      rwLockObjectLockWriter( lock );
-      ++(*counter);
-      printf( "WriterThread%d: %d\n", threadnum, *counter );
-      rwLockObjectRelease( lock );
-   }
+   mutexObjectLock( lock, -1 );
+   printf("Low Priority\n");
+   sleep( 600 );
+   printf("About to release lock\n");
+   mutexObjectRelease( lock );
+   while(1);
 }
 
-void functionReadingThread(volatile uint32 * const counter, uint32 threadnum, rwLockObject_t * const lock)
+void functionMedThread()
 {
-   printf( "ReaderThread%d: START\n", threadnum );
-   while(1)
-   {
-      rwLockObjectLockReader( lock );
-      printf( "ReaderThread%d: %d\n", threadnum, *counter );
-      rwLockObjectRelease( lock );
-   }
+   sleep( 400 );
+   printf("Evil Medium Thread!!!\n");
+   while(1);
+}
+
+void functionHighThread( mutexObject_t * const lock)
+{
+   sleep( 600 );
+   printf("Try to get lock!!!\n");
+   mutexObjectLock( lock, -1 );
+   printf("Got the lock!!!\n");
+   while(1);
 }
 
