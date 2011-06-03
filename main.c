@@ -41,7 +41,7 @@ int main(void)
 
    printf(">Creating Threads\n");
 
-   mutexObjectInit( &mutex, 1);
+   mutexObjectInitEx( &mutex, 1, 1 );
 
    threadObjectCreate(&threads[0],
                      (void *)functionLowThread,
@@ -98,7 +98,9 @@ void functionMedThread()
 {
    sleep( 400 );
    printf("Evil Medium Thread!!!\n");
-   while(1);
+   while(1)
+   {
+   }
 }
 
 void functionHighThread( mutexObject_t * const lock)

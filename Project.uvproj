@@ -440,6 +440,11 @@
               <FileType>1</FileType>
               <FilePath>.\SROS\source\mutexObject.c</FilePath>
             </File>
+            <File>
+              <FileName>rtosImpl.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\SROS\source\rtosImpl.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
